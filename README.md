@@ -1,4 +1,4 @@
-# Shopify Admin - Flutter Frontend
+# Shopify Merchant App - Flutter Frontend
 
 A premium, modern Flutter application for managing Shopify store operations. Built with **Clean Architecture** and **Feature-first** organization.
 

@@ -1,10 +1,10 @@
-name: shopify_frontend
-description: "A new Flutter project."
+name: shopify_merchant_app
+description: "A premium Shopify Merchant application."
 publish_to: 'none'
 version: 0.1.0+1
 
 environment:
-  sdk: ^3.12.0-130.0.dev
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
