@@ -157,7 +157,7 @@ extension AuthEventPatterns on AuthEvent {
     TResult Function()? appStarted,
     TResult Function(String email, String password)? loginRequested,
     TResult Function()? logoutRequested,
-    TResult Function(String token)? tokenRefreshed,
+    TResult Function(String accessToken, String? refreshToken)? tokenRefreshed,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -169,7 +169,7 @@ extension AuthEventPatterns on AuthEvent {
       case LogoutRequested() when logoutRequested != null:
         return logoutRequested();
       case TokenRefreshed() when tokenRefreshed != null:
-        return tokenRefreshed(_that.token);
+        return tokenRefreshed(_that.accessToken, _that.refreshToken);
       case _:
         return orElse();
     }
@@ -193,7 +193,8 @@ extension AuthEventPatterns on AuthEvent {
     required TResult Function() appStarted,
     required TResult Function(String email, String password) loginRequested,
     required TResult Function() logoutRequested,
-    required TResult Function(String token) tokenRefreshed,
+    required TResult Function(String accessToken, String? refreshToken)
+        tokenRefreshed,
   }) {
     final _that = this;
     switch (_that) {
@@ -204,7 +205,7 @@ extension AuthEventPatterns on AuthEvent {
       case LogoutRequested():
         return logoutRequested();
       case TokenRefreshed():
-        return tokenRefreshed(_that.token);
+        return tokenRefreshed(_that.accessToken, _that.refreshToken);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -227,7 +228,7 @@ extension AuthEventPatterns on AuthEvent {
     TResult? Function()? appStarted,
     TResult? Function(String email, String password)? loginRequested,
     TResult? Function()? logoutRequested,
-    TResult? Function(String token)? tokenRefreshed,
+    TResult? Function(String accessToken, String? refreshToken)? tokenRefreshed,
   }) {
     final _that = this;
     switch (_that) {
@@ -238,7 +239,7 @@ extension AuthEventPatterns on AuthEvent {
       case LogoutRequested() when logoutRequested != null:
         return logoutRequested();
       case TokenRefreshed() when tokenRefreshed != null:
-        return tokenRefreshed(_that.token);
+        return tokenRefreshed(_that.accessToken, _that.refreshToken);
       case _:
         return null;
     }
@@ -360,9 +361,10 @@ class LogoutRequested implements AuthEvent {
 /// @nodoc
 
 class TokenRefreshed implements AuthEvent {
-  const TokenRefreshed(this.token);
+  const TokenRefreshed({required this.accessToken, this.refreshToken});
 
-  final String token;
+  final String accessToken;
+  final String? refreshToken;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -376,15 +378,18 @@ class TokenRefreshed implements AuthEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is TokenRefreshed &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.accessToken, accessToken) ||
+                other.accessToken == accessToken) &&
+            (identical(other.refreshToken, refreshToken) ||
+                other.refreshToken == refreshToken));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, token);
+  int get hashCode => Object.hash(runtimeType, accessToken, refreshToken);
 
   @override
   String toString() {
-    return 'AuthEvent.tokenRefreshed(token: $token)';
+    return 'AuthEvent.tokenRefreshed(accessToken: $accessToken, refreshToken: $refreshToken)';
   }
 }
 
@@ -395,7 +400,7 @@ abstract mixin class $TokenRefreshedCopyWith<$Res>
           TokenRefreshed value, $Res Function(TokenRefreshed) _then) =
       _$TokenRefreshedCopyWithImpl;
   @useResult
-  $Res call({String token});
+  $Res call({String accessToken, String? refreshToken});
 }
 
 /// @nodoc
@@ -410,13 +415,18 @@ class _$TokenRefreshedCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? token = null,
+    Object? accessToken = null,
+    Object? refreshToken = freezed,
   }) {
     return _then(TokenRefreshed(
-      null == token
-          ? _self.token
-          : token // ignore: cast_nullable_to_non_nullable
+      accessToken: null == accessToken
+          ? _self.accessToken
+          : accessToken // ignore: cast_nullable_to_non_nullable
               as String,
+      refreshToken: freezed == refreshToken
+          ? _self.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

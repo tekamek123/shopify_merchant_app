@@ -8,5 +8,8 @@ class AuthEvent with _$AuthEvent {
     required String password,
   }) = LoginRequested;
   const factory AuthEvent.logoutRequested() = LogoutRequested;
-  const factory AuthEvent.tokenRefreshed(String token) = TokenRefreshed;
+  const factory AuthEvent.tokenRefreshed({
+    required String accessToken,
+    String? refreshToken,
+  }) = TokenRefreshed;
 }

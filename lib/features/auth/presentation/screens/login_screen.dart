@@ -41,9 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
             if (request.url.contains('token=')) {
               final uri = Uri.parse(request.url);
               final token = uri.queryParameters['token'];
+              final refreshToken = uri.queryParameters['refresh_token'];
               
               if (token != null) {
-                context.read<AuthBloc>().add(AuthEvent.tokenRefreshed(token));
+                context.read<AuthBloc>().add(AuthEvent.tokenRefreshed(
+                  accessToken: token,
+                  refreshToken: refreshToken,
+                ));
                 return NavigationDecision.prevent;
               }
             }

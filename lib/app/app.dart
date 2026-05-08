@@ -13,6 +13,7 @@ class ShopifyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthBloc(
         storage: SecureStorage(),
+        authService: AppRoutes.authService,
       )..add(const AuthEvent.appStarted()),
       child: MaterialApp.router(
         title: 'Shopify Admin',
